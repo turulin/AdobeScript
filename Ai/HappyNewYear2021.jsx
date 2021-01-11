@@ -52,7 +52,13 @@ const
     },
     COLOR = {
       STEM: new CMYKColor(),
-      NEEDLES: new CMYKColor(),
+      NEEDLES: [
+        new CMYKColor(),
+        new CMYKColor(),
+        new CMYKColor(),
+        new CMYKColor(),
+        new CMYKColor(),
+      ],
       STAR: new CMYKColor(),
       TEXT: new CMYKColor(),
       BLACK: new CMYKColor(),
@@ -63,10 +69,30 @@ COLOR.STEM.magenta = 70;
 COLOR.STEM.yellow = 100;
 COLOR.STEM.black = 60;
 
-COLOR.NEEDLES.cyan = 90;
-COLOR.NEEDLES.magenta = 30;
-COLOR.NEEDLES.yellow = 100;
-COLOR.NEEDLES.black = 25;
+COLOR.NEEDLES[0].cyan = 90;
+COLOR.NEEDLES[0].magenta = 30;
+COLOR.NEEDLES[0].yellow = 100;
+COLOR.NEEDLES[0].black = 25;
+
+COLOR.NEEDLES[1].cyan = 24;
+COLOR.NEEDLES[1].magenta = 0;
+COLOR.NEEDLES[1].yellow = 90;
+COLOR.NEEDLES[1].black = 0;
+
+COLOR.NEEDLES[2].cyan = 90;
+COLOR.NEEDLES[2].magenta = 70;
+COLOR.NEEDLES[2].yellow = 0;
+COLOR.NEEDLES[2].black = 0;
+
+COLOR.NEEDLES[3].cyan = 0;
+COLOR.NEEDLES[3].magenta = 92;
+COLOR.NEEDLES[3].yellow = 61;
+COLOR.NEEDLES[3].black = 0;
+
+COLOR.NEEDLES[4].cyan = 38;
+COLOR.NEEDLES[4].magenta = 78;
+COLOR.NEEDLES[4].yellow = 0;
+COLOR.NEEDLES[4].black = 0;
 
 COLOR.STAR.cyan = 0;
 COLOR.STAR.magenta = 90;
@@ -89,10 +115,12 @@ var
     vTreeStemBottom,
     vTreeNeedlesWidth,
     vTreeNeedlesCount,
+    vTreeNeedlesColor = 0,
     vTreeBranchHeight,
     vTreeBranchWidth,
     vFiguresCount,
-    vFiguresWidth
+    vFiguresWidth,
+    vFiguresColor
 ;
 
 /**
@@ -186,7 +214,7 @@ function draw() {
   NEEDLES.closed = true;
   NEEDLES.filled = true;
   NEEDLES.stroked = false;
-  NEEDLES.fillColor = COLOR.NEEDLES;
+  NEEDLES.fillColor = COLOR.NEEDLES[vTreeNeedlesColor];
 
   /**
    * Figures
@@ -207,9 +235,9 @@ function draw() {
       figure = DOC.pathItems.star(figureX, figureY, figureSize, figureSize * STAR.K_INNER_RADIUS)
     }
     color = new CMYKColor()
-    color.cyan = 20 + (random < 0.3 ? 70 * Math.random() : 0)
-    color.magenta = 20 + ((random > 0.3 && random < 0.6) ? 70 * Math.random() : 0)
-    color.yellow = 20 + (random > 0.6 ? 70 * Math.random() : 0)
+    color.cyan = (random < 0.8 ? vFiguresColor * Math.random() : 0)
+    color.magenta = ((random > 0.4 && random < 0.6) ? vFiguresColor * Math.random() : 0)
+    color.yellow = (random > 0.3 ? vFiguresColor * Math.random() : 0)
     color.black = 0
     figure.filled = true;
     figure.stroked = false;
@@ -288,6 +316,7 @@ function showWindow() {
         TREE.NEEDLES.BRANCH.WIDTH * sliderTreeBranchWidth.value / 100;
     vFiguresCount = FIGURES.COUNT * sliderFiguresCount.value / 100;
     vFiguresWidth = FIGURES.TO_SIZE * sliderFiguresWidth.value / 100;
+    vFiguresColor = sliderFiguresColor.value;
 
     draw();
     needUndo = true;
@@ -319,7 +348,7 @@ function showWindow() {
 
   /*
   Code for Import https://scriptui.joonas.me — (Triple click to select):
-  {"activeId":34,"items":{"item-0":{"id":0,"type":"Dialog","parentId":false,"style":{"enabled":true,"varName":null,"windowType":"Dialog","creationProps":{"su1PanelCoordinates":false,"maximizeButton":false,"minimizeButton":false,"independent":false,"closeButton":true,"borderless":false,"resizeable":false},"text":"Новогодняя ёлка","preferredSize":[0,0],"margins":16,"orientation":"column","spacing":10,"alignChildren":["center","top"]}},"item-1":{"id":1,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":"panelTree","creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Ёлка","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-2":{"id":2,"type":"Slider","parentId":3,"style":{"enabled":true,"varName":"sliderTreeBottom","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-3":{"id":3,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-4":{"id":4,"type":"StaticText","parentId":3,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Снизу","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-5":{"id":5,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-6":{"id":6,"type":"StaticText","parentId":5,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Сверху","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-7":{"id":7,"type":"Slider","parentId":5,"style":{"enabled":true,"varName":"sliderTreeTop","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-8":{"id":8,"type":"Group","parentId":0,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":30,"alignChildren":["left","center"],"alignment":null}},"item-9":{"id":9,"type":"Button","parentId":8,"style":{"enabled":true,"varName":"buttonDraw","text":"Нарисовать","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-10":{"id":10,"type":"Button","parentId":8,"style":{"enabled":true,"varName":"buttonCancel","text":"Отмена","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-11":{"id":11,"type":"Checkbox","parentId":0,"style":{"enabled":true,"varName":"preview","text":"Превью","preferredSize":[100,0],"alignment":"left","helpTip":null,"checked":true}},"item-12":{"id":12,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-13":{"id":13,"type":"StaticText","parentId":12,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Ширина","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-14":{"id":14,"type":"Slider","parentId":12,"style":{"enabled":true,"varName":"sliderTreeWidth","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-15":{"id":15,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-16":{"id":16,"type":"StaticText","parentId":15,"style":{"enabled":true,"varName":"","creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Веток","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-17":{"id":17,"type":"Slider","parentId":15,"style":{"enabled":true,"varName":"sliderTreeCount","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-18":{"id":18,"type":"Group","parentId":24,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-19":{"id":19,"type":"StaticText","parentId":18,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Высота","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-20":{"id":20,"type":"Slider","parentId":18,"style":{"enabled":true,"varName":"sliderTreeBranchHeight","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-21":{"id":21,"type":"Group","parentId":24,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-22":{"id":22,"type":"StaticText","parentId":21,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Ширина","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-23":{"id":23,"type":"Slider","parentId":21,"style":{"enabled":true,"varName":"sliderTreeBranchWidth","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-24":{"id":24,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Ветки","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-25":{"id":25,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Ствол","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-26":{"id":26,"type":"Group","parentId":25,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-27":{"id":27,"type":"StaticText","parentId":26,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Ширина","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-28":{"id":28,"type":"Slider","parentId":26,"style":{"enabled":true,"varName":"sliderTreeStem","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-29":{"id":29,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Игрушки","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-30":{"id":30,"type":"Group","parentId":29,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-31":{"id":31,"type":"StaticText","parentId":30,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Количество","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-32":{"id":32,"type":"Slider","parentId":30,"style":{"enabled":true,"varName":"sliderFiguresCount","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-33":{"id":33,"type":"Group","parentId":29,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-34":{"id":34,"type":"StaticText","parentId":33,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Размер","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-35":{"id":35,"type":"Slider","parentId":33,"style":{"enabled":true,"varName":"sliderFiguresWidth","preferredSize":[100,0],"alignment":null,"helpTip":null}}},"order":[0,25,26,27,28,1,5,6,7,3,4,2,12,13,14,15,16,17,24,18,19,20,21,22,23,29,30,31,32,33,34,35,11,8,10,9],"settings":{"importJSON":true,"indentSize":false,"cepExport":false,"includeCSSJS":true,"showDialog":true,"functionWrapper":false,"afterEffectsDockable":false,"itemReferenceList":"None"}}
+  {"activeId":44,"items":{"item-0":{"id":0,"type":"Dialog","parentId":false,"style":{"enabled":true,"varName":null,"windowType":"Dialog","creationProps":{"su1PanelCoordinates":false,"maximizeButton":false,"minimizeButton":false,"independent":false,"closeButton":true,"borderless":false,"resizeable":false},"text":"Новогодняя ёлка","preferredSize":[0,0],"margins":16,"orientation":"column","spacing":10,"alignChildren":["center","top"]}},"item-1":{"id":1,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":"panelTree","creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Ёлка","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-2":{"id":2,"type":"Slider","parentId":3,"style":{"enabled":true,"varName":"sliderTreeBottom","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-3":{"id":3,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-4":{"id":4,"type":"StaticText","parentId":3,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Снизу","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-5":{"id":5,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-6":{"id":6,"type":"StaticText","parentId":5,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Сверху","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-7":{"id":7,"type":"Slider","parentId":5,"style":{"enabled":true,"varName":"sliderTreeTop","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-8":{"id":8,"type":"Group","parentId":0,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":30,"alignChildren":["left","center"],"alignment":null}},"item-9":{"id":9,"type":"Button","parentId":8,"style":{"enabled":true,"varName":"buttonDraw","text":"Нарисовать","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-10":{"id":10,"type":"Button","parentId":8,"style":{"enabled":true,"varName":"buttonCancel","text":"Отмена","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-11":{"id":11,"type":"Checkbox","parentId":0,"style":{"enabled":true,"varName":"preview","text":"Превью","preferredSize":[100,0],"alignment":"left","helpTip":null,"checked":true}},"item-12":{"id":12,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-13":{"id":13,"type":"StaticText","parentId":12,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Ширина","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-14":{"id":14,"type":"Slider","parentId":12,"style":{"enabled":true,"varName":"sliderTreeWidth","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-15":{"id":15,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-16":{"id":16,"type":"StaticText","parentId":15,"style":{"enabled":true,"varName":"","creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Веток","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-17":{"id":17,"type":"Slider","parentId":15,"style":{"enabled":true,"varName":"sliderTreeCount","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-18":{"id":18,"type":"Group","parentId":24,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-19":{"id":19,"type":"StaticText","parentId":18,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Высота","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-20":{"id":20,"type":"Slider","parentId":18,"style":{"enabled":true,"varName":"sliderTreeBranchHeight","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-21":{"id":21,"type":"Group","parentId":24,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-22":{"id":22,"type":"StaticText","parentId":21,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Ширина","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-23":{"id":23,"type":"Slider","parentId":21,"style":{"enabled":true,"varName":"sliderTreeBranchWidth","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-24":{"id":24,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Ветки","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-25":{"id":25,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Ствол","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-26":{"id":26,"type":"Group","parentId":25,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-27":{"id":27,"type":"StaticText","parentId":26,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Ширина","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-28":{"id":28,"type":"Slider","parentId":26,"style":{"enabled":true,"varName":"sliderTreeStem","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-29":{"id":29,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Игрушки","preferredSize":[0,0],"margins":10,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-30":{"id":30,"type":"Group","parentId":29,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-31":{"id":31,"type":"StaticText","parentId":30,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Количество","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-32":{"id":32,"type":"Slider","parentId":30,"style":{"enabled":true,"varName":"sliderFiguresCount","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-33":{"id":33,"type":"Group","parentId":29,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-34":{"id":34,"type":"StaticText","parentId":33,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Размер","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-35":{"id":35,"type":"Slider","parentId":33,"style":{"enabled":true,"varName":"sliderFiguresWidth","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-36":{"id":36,"type":"Group","parentId":41,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"column","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-37":{"id":37,"type":"RadioButton","parentId":36,"style":{"enabled":true,"varName":"treeColor1","text":"зелёная","preferredSize":[0,0],"alignment":null,"helpTip":null,"checked":true}},"item-38":{"id":38,"type":"RadioButton","parentId":36,"style":{"enabled":true,"varName":"treeColor2","text":"жёлтая","preferredSize":[0,0],"alignment":null,"helpTip":null,"checked":false}},"item-39":{"id":39,"type":"RadioButton","parentId":36,"style":{"enabled":true,"varName":"treeColor3","text":"синяя","preferredSize":[0,0],"alignment":null,"helpTip":null,"checked":false}},"item-40":{"id":40,"type":"RadioButton","parentId":36,"style":{"enabled":true,"varName":"treeColor4","text":"красная","preferredSize":[0,0],"alignment":null,"helpTip":null,"checked":false}},"item-41":{"id":41,"type":"Group","parentId":1,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-42":{"id":42,"type":"StaticText","parentId":41,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Цвет","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-43":{"id":43,"type":"RadioButton","parentId":36,"style":{"enabled":true,"varName":"treeColor5","text":"розовая","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-44":{"id":44,"type":"Group","parentId":29,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-45":{"id":45,"type":"StaticText","parentId":44,"style":{"enabled":true,"varName":null,"creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Цвет","justify":"left","preferredSize":[100,0],"alignment":null,"helpTip":null}},"item-46":{"id":46,"type":"Slider","parentId":44,"style":{"enabled":true,"varName":"sliderFiguresColor","preferredSize":[100,0],"alignment":null,"helpTip":null}}},"order":[0,25,26,27,28,1,5,6,7,3,4,2,12,13,14,15,16,17,41,42,36,37,38,39,40,43,24,18,19,20,21,22,23,29,30,31,32,33,34,35,44,45,46,11,8,10,9],"settings":{"importJSON":true,"indentSize":false,"cepExport":false,"includeCSSJS":true,"showDialog":true,"functionWrapper":false,"afterEffectsDockable":false,"itemReferenceList":"None"}}
   */
 
 // DIALOG
@@ -439,6 +468,42 @@ function showWindow() {
   sliderTreeCount.value = 50;
   sliderTreeCount.preferredSize.width = 100;
 
+// GROUP6
+// ======
+  var group6 = panelTree.add("group", undefined, {name: "group6"});
+  group6.orientation = "row";
+  group6.alignChildren = ["left","top"];
+  group6.spacing = 10;
+  group6.margins = 0;
+
+  var statictext6 = group6.add("statictext", undefined, undefined, {name: "statictext6"});
+  statictext6.text = "Цвет";
+  statictext6.preferredSize.width = 100;
+
+// GROUP7
+// ======
+  var group7 = group6.add("group", undefined, {name: "group7"});
+  group7.orientation = "column";
+  group7.alignChildren = ["left","center"];
+  group7.spacing = 10;
+  group7.margins = 0;
+
+  var treeColor1 = group7.add("radiobutton", undefined, undefined, {name: "treeColor1"});
+  treeColor1.text = "зелёная";
+  treeColor1.value = true;
+
+  var treeColor2 = group7.add("radiobutton", undefined, undefined, {name: "treeColor2"});
+  treeColor2.text = "жёлтая";
+
+  var treeColor3 = group7.add("radiobutton", undefined, undefined, {name: "treeColor3"});
+  treeColor3.text = "синяя";
+
+  var treeColor4 = group7.add("radiobutton", undefined, undefined, {name: "treeColor4"});
+  treeColor4.text = "красная";
+
+  var treeColor5 = group7.add("radiobutton", undefined, undefined, {name: "treeColor5"});
+  treeColor5.text = "розовая";
+
 // PANEL2
 // ======
   var panel2 = dialog.add("panel", undefined, undefined, {name: "panel2"});
@@ -448,37 +513,37 @@ function showWindow() {
   panel2.spacing = 10;
   panel2.margins = 10;
 
-// GROUP6
+// GROUP8
 // ======
-  var group6 = panel2.add("group", undefined, {name: "group6"});
-  group6.orientation = "row";
-  group6.alignChildren = ["left","center"];
-  group6.spacing = 10;
-  group6.margins = 0;
+  var group8 = panel2.add("group", undefined, {name: "group8"});
+  group8.orientation = "row";
+  group8.alignChildren = ["left","center"];
+  group8.spacing = 10;
+  group8.margins = 0;
 
-  var statictext6 = group6.add("statictext", undefined, undefined, {name: "statictext6"});
-  statictext6.text = "Высота";
-  statictext6.preferredSize.width = 100;
+  var statictext7 = group8.add("statictext", undefined, undefined, {name: "statictext7"});
+  statictext7.text = "Высота";
+  statictext7.preferredSize.width = 100;
 
-  var sliderTreeBranchHeight = group6.add("slider", undefined, undefined, undefined, undefined, {name: "sliderTreeBranchHeight"});
+  var sliderTreeBranchHeight = group8.add("slider", undefined, undefined, undefined, undefined, {name: "sliderTreeBranchHeight"});
   sliderTreeBranchHeight.minvalue = 0;
   sliderTreeBranchHeight.maxvalue = 100;
   sliderTreeBranchHeight.value = 50;
   sliderTreeBranchHeight.preferredSize.width = 100;
 
-// GROUP7
+// GROUP9
 // ======
-  var group7 = panel2.add("group", undefined, {name: "group7"});
-  group7.orientation = "row";
-  group7.alignChildren = ["left","center"];
-  group7.spacing = 10;
-  group7.margins = 0;
+  var group9 = panel2.add("group", undefined, {name: "group9"});
+  group9.orientation = "row";
+  group9.alignChildren = ["left","center"];
+  group9.spacing = 10;
+  group9.margins = 0;
 
-  var statictext7 = group7.add("statictext", undefined, undefined, {name: "statictext7"});
-  statictext7.text = "Ширина";
-  statictext7.preferredSize.width = 100;
+  var statictext8 = group9.add("statictext", undefined, undefined, {name: "statictext8"});
+  statictext8.text = "Ширина";
+  statictext8.preferredSize.width = 100;
 
-  var sliderTreeBranchWidth = group7.add("slider", undefined, undefined, undefined, undefined, {name: "sliderTreeBranchWidth"});
+  var sliderTreeBranchWidth = group9.add("slider", undefined, undefined, undefined, undefined, {name: "sliderTreeBranchWidth"});
   sliderTreeBranchWidth.minvalue = 0;
   sliderTreeBranchWidth.maxvalue = 100;
   sliderTreeBranchWidth.value = 50;
@@ -493,41 +558,59 @@ function showWindow() {
   panel3.spacing = 10;
   panel3.margins = 10;
 
-// GROUP8
-// ======
-  var group8 = panel3.add("group", undefined, {name: "group8"});
-  group8.orientation = "row";
-  group8.alignChildren = ["left","center"];
-  group8.spacing = 10;
-  group8.margins = 0;
+// GROUP10
+// =======
+  var group10 = panel3.add("group", undefined, {name: "group10"});
+  group10.orientation = "row";
+  group10.alignChildren = ["left","center"];
+  group10.spacing = 10;
+  group10.margins = 0;
 
-  var statictext8 = group8.add("statictext", undefined, undefined, {name: "statictext8"});
-  statictext8.text = "Количество";
-  statictext8.preferredSize.width = 100;
+  var statictext9 = group10.add("statictext", undefined, undefined, {name: "statictext9"});
+  statictext9.text = "Количество";
+  statictext9.preferredSize.width = 100;
 
-  var sliderFiguresCount = group8.add("slider", undefined, undefined, undefined, undefined, {name: "sliderFiguresCount"});
+  var sliderFiguresCount = group10.add("slider", undefined, undefined, undefined, undefined, {name: "sliderFiguresCount"});
   sliderFiguresCount.minvalue = 0;
   sliderFiguresCount.maxvalue = 100;
   sliderFiguresCount.value = 50;
   sliderFiguresCount.preferredSize.width = 100;
 
-// GROUP9
-// ======
-  var group9 = panel3.add("group", undefined, {name: "group9"});
-  group9.orientation = "row";
-  group9.alignChildren = ["left","center"];
-  group9.spacing = 10;
-  group9.margins = 0;
+// GROUP11
+// =======
+  var group11 = panel3.add("group", undefined, {name: "group11"});
+  group11.orientation = "row";
+  group11.alignChildren = ["left","center"];
+  group11.spacing = 10;
+  group11.margins = 0;
 
-  var statictext9 = group9.add("statictext", undefined, undefined, {name: "statictext9"});
-  statictext9.text = "Размер";
-  statictext9.preferredSize.width = 100;
+  var statictext10 = group11.add("statictext", undefined, undefined, {name: "statictext10"});
+  statictext10.text = "Размер";
+  statictext10.preferredSize.width = 100;
 
-  var sliderFiguresWidth = group9.add("slider", undefined, undefined, undefined, undefined, {name: "sliderFiguresWidth"});
+  var sliderFiguresWidth = group11.add("slider", undefined, undefined, undefined, undefined, {name: "sliderFiguresWidth"});
   sliderFiguresWidth.minvalue = 0;
   sliderFiguresWidth.maxvalue = 100;
   sliderFiguresWidth.value = 50;
   sliderFiguresWidth.preferredSize.width = 100;
+
+// GROUP12
+// =======
+  var group12 = panel3.add("group", undefined, {name: "group12"});
+  group12.orientation = "row";
+  group12.alignChildren = ["left","center"];
+  group12.spacing = 10;
+  group12.margins = 0;
+
+  var statictext11 = group12.add("statictext", undefined, undefined, {name: "statictext11"});
+  statictext11.text = "Цвет";
+  statictext11.preferredSize.width = 100;
+
+  var sliderFiguresColor = group12.add("slider", undefined, undefined, undefined, undefined, {name: "sliderFiguresColor"});
+  sliderFiguresColor.minvalue = 0;
+  sliderFiguresColor.maxvalue = 100;
+  sliderFiguresColor.value = 50;
+  sliderFiguresColor.preferredSize.width = 100;
 
 // DIALOG
 // ======
@@ -537,18 +620,18 @@ function showWindow() {
   preview.preferredSize.width = 100;
   preview.alignment = ["left","top"];
 
-// GROUP10
+// GROUP13
 // =======
-  var group10 = dialog.add("group", undefined, {name: "group10"});
-  group10.orientation = "row";
-  group10.alignChildren = ["left","center"];
-  group10.spacing = 30;
-  group10.margins = 0;
+  var group13 = dialog.add("group", undefined, {name: "group13"});
+  group13.orientation = "row";
+  group13.alignChildren = ["left","center"];
+  group13.spacing = 30;
+  group13.margins = 0;
 
-  var buttonCancel = group10.add("button", undefined, undefined, {name: "buttonCancel"});
+  var buttonCancel = group13.add("button", undefined, undefined, {name: "buttonCancel"});
   buttonCancel.text = "Отмена";
 
-  var buttonDraw = group10.add("button", undefined, undefined, {name: "buttonDraw"});
+  var buttonDraw = group13.add("button", undefined, undefined, {name: "buttonDraw"});
   buttonDraw.text = "Нарисовать";
 
   sliderTreeStem.onChange = function() {
@@ -571,6 +654,41 @@ function showWindow() {
     previewStart();
   };
 
+  treeColor1.onClick = function() {
+    if ( 0 !== vTreeNeedlesColor) {
+      vTreeNeedlesColor = 0
+      previewStart();
+    }
+  }
+
+  treeColor2.onClick = function() {
+    if ( 1 !== vTreeNeedlesColor) {
+      vTreeNeedlesColor = 1
+      previewStart();
+    }
+  }
+
+  treeColor3.onClick = function() {
+    if ( 2 !== vTreeNeedlesColor) {
+      vTreeNeedlesColor = 2
+      previewStart();
+    }
+  }
+
+  treeColor4.onClick = function() {
+    if ( 3 !== vTreeNeedlesColor) {
+      vTreeNeedlesColor = 3
+      previewStart();
+    }
+  }
+
+  treeColor5.onClick = function() {
+    if ( 4 !== vTreeNeedlesColor) {
+      vTreeNeedlesColor = 4
+      previewStart();
+    }
+  }
+
   sliderTreeBranchHeight.onChange = function() {
     previewStart();
   };
@@ -584,6 +702,10 @@ function showWindow() {
   };
 
   sliderFiguresWidth.onChange = function() {
+    previewStart();
+  };
+
+  sliderFiguresColor.onChange = function() {
     previewStart();
   };
 
