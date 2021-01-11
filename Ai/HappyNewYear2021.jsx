@@ -298,6 +298,7 @@ function showWindow() {
 
   var needUndo = false;
   var closeDoc = false;
+  var finishDraw = false;
 
   function startAction() {
 
@@ -319,12 +320,14 @@ function showWindow() {
     vFiguresColor = sliderFiguresColor.value;
 
     draw();
-    needUndo = true;
-    redraw();
+    if (false === finishDraw) {
+      needUndo = true;
+      redraw();
+    }
   }
 
   function previewStart() {
-    if (preview.value) {
+    if (true) {
       if (true === needUndo) {
         appUnDo();
         needUndo = false;
@@ -333,15 +336,10 @@ function showWindow() {
       }
 
       startAction();
-    } else {
-      if (true === needUndo) {
-        appUnDo();
-        needUndo = false;
-      }
     }
   }
 
-  function appUnDo(message) {
+  function appUnDo() {
     app.undo();
     redraw();
   }
@@ -614,11 +612,11 @@ function showWindow() {
 
 // DIALOG
 // ======
-  var preview = dialog.add("checkbox", undefined, undefined, {name: "preview"});
-  preview.text = "Превью";
-  preview.value = true;
-  preview.preferredSize.width = 100;
-  preview.alignment = ["left","top"];
+//   var preview = dialog.add("checkbox", undefined, undefined, {name: "preview"});
+//   preview.text = "Превью";
+//   preview.value = true;
+//   preview.preferredSize.width = 100;
+//   preview.alignment = ["left","top"];
 
 // GROUP13
 // =======
@@ -632,7 +630,7 @@ function showWindow() {
   buttonCancel.text = "Отмена";
 
   var buttonDraw = group13.add("button", undefined, undefined, {name: "buttonDraw"});
-  buttonDraw.text = "Нарисовать";
+  buttonDraw.text = "Готово";
 
   sliderTreeStem.onChange = function() {
     previewStart();
@@ -709,20 +707,16 @@ function showWindow() {
     previewStart();
   };
 
-  preview.onClick = function() {
-    previewStart();
-  };
-
   buttonCancel.onClick = function() {
     closeDoc = true;
-    dialog.close(0);
+    dialog.close();
   };
 
   buttonDraw.onClick = function() {
     closeDoc = false;
-    needUndo = false;
-    dialog.close(0);
-    startAction();
+    needUndo = true;
+    finishDraw = true;
+    dialog.close();
   };
 
   dialog.onShow = function() {
@@ -732,7 +726,6 @@ function showWindow() {
 
   dialog.onClose = function() {
     if (true === needUndo) {
-      appUnDo();
       needUndo = false;
     }
     if (closeDoc) {
