@@ -1,7 +1,10 @@
 /**
  * Happy New Year 2021!
  * ©Sergey Turulin
- * sergey@adobescript.ru
+ *
+ * email: sergey@adobescript.ru
+ * telegram: turulin
+ * twitter: STurulin
  */
 
 /**
@@ -14,12 +17,12 @@ const
     },
     TREE = {
       STEM: {
-        TOP: 0.2,
+        TOP: 0.25,
         BOTTOM: 0.2,
         WIDTH: 0.2,
       },
       NEEDLES: {
-        WIDTH: 0.6,
+        WIDTH: 0.7,
         COUNT: 5,
         BOTTOM: 0.3,
         BRANCH: {
@@ -30,22 +33,29 @@ const
     },
     STAR = {
       RADIUS: 25,
-      K_INNER_RADIUS: 0.35,
+      K_INNER_RADIUS: 0.32,
     },
     TEXT = {
-      SIZE: 24,
-      CONTENTS: 'Со Старым Новым 2021 годом!',
+      HAPPY: {
+        SIZE: 24,
+        CONTENTS: 'Со Старым Новым 2021 годом!',
+      },
+      COPYRIGHT: {
+        SIZE: 8,
+        CONTENTS: 'Design: Sergey Turulin, 2021',
+      }
     },
     FIGURES = {
-      COUNT: 100,
-      MINIMUM_SIZE: 4,
-      TO_SIZE: 12,
+      COUNT: 200,
+      MINIMUM_SIZE: 5,
+      TO_SIZE: 14,
     },
     COLOR = {
       STEM: new CMYKColor(),
       NEEDLES: new CMYKColor(),
       STAR: new CMYKColor(),
       TEXT: new CMYKColor(),
+      BLACK: new CMYKColor(),
     };
 
 COLOR.STEM.cyan = 40;
@@ -67,6 +77,11 @@ COLOR.TEXT.cyan = 0;
 COLOR.TEXT.magenta = 100;
 COLOR.TEXT.yellow = 100;
 COLOR.TEXT.black = 0;
+
+COLOR.BLACK.cyan = 0;
+COLOR.BLACK.magenta = 0;
+COLOR.BLACK.yellow = 0;
+COLOR.BLACK.black = 100;
 
 var
     vTreeStemWidth,
@@ -179,9 +194,12 @@ function draw() {
   var color, random, randomFigureY, figureX, figureY, figureSize, figure;
   for (i = 0; i < vFiguresCount; i++) {
     random = Math.random()
+    if (random > 0.3) {
+      random *= Math.random()
+    }
     figureSize = FIGURES.MINIMUM_SIZE + vFiguresWidth * Math.random()
     randomFigureY = Math.random()
-    figureY = (needlesHeight * randomFigureY) + (treeStart[1] - needlesHeight)
+    figureY = -10 + (needlesHeight * randomFigureY) + (treeStart[1] - needlesHeight)
     figureX = treeStart[0] - ((1 -randomFigureY) * needlesWidth / 2) + ((1 -randomFigureY) * needlesWidth * Math.random())
     if (random < 0.5) {
       figure = DOC.pathItems.ellipse(figureY, figureX, figureSize, figureSize)
@@ -208,13 +226,8 @@ function draw() {
   STAR_PATH.fillColor = COLOR.STAR;
 
   /**
-   * Text
+   * Font
    */
-  const TEXT_2021 = DOC.textFrames.add();
-  TEXT_2021.contents = TEXT.CONTENTS;
-  TEXT_2021.left = SIZE.WIDTH / 2;
-  TEXT_2021.top = SIZE.HEIGHT * TREE.STEM.BOTTOM / 2;
-
   var textFont = app.textFonts.getByName('MyriadPro-Regular');
   try {
     textFont = app.textFonts.getByName('Roboto-Regular');
@@ -222,12 +235,34 @@ function draw() {
   } catch (e) {
   }
 
+  /**
+   * Text 2021
+   */
+  const TEXT_2021 = DOC.textFrames.add();
+  TEXT_2021.contents = TEXT.HAPPY.CONTENTS;
+  TEXT_2021.left = SIZE.WIDTH / 2;
+  TEXT_2021.top = SIZE.HEIGHT * TREE.STEM.BOTTOM / 2;
+
   for (i = 0; i < TEXT_2021.textRanges.length; i++) {
     TEXT_2021.textRanges[i].characterAttributes.textFont = textFont;
     TEXT_2021.textRanges[i].characterAttributes.fillColor = COLOR.TEXT;
-    TEXT_2021.textRanges[i].characterAttributes.size = TEXT.SIZE;
-    TEXT_2021.textRanges[i].paragraphAttributes.justification =
-        Justification.CENTER;
+    TEXT_2021.textRanges[i].characterAttributes.size = TEXT.HAPPY.SIZE;
+    TEXT_2021.textRanges[i].paragraphAttributes.justification = Justification.CENTER;
+  }
+
+  /**
+   * Text Copyright
+   */
+  const TEXT_COPYRIGHT = DOC.textFrames.add();
+  TEXT_COPYRIGHT.contents = TEXT.COPYRIGHT.CONTENTS;
+  TEXT_COPYRIGHT.left = SIZE.WIDTH / 2;
+  TEXT_COPYRIGHT.top = 5 + (TEXT.COPYRIGHT.SIZE * 2);
+
+  for (i = 0; i < TEXT_COPYRIGHT.textRanges.length; i++) {
+    TEXT_COPYRIGHT.textRanges[i].characterAttributes.textFont = textFont;
+    TEXT_COPYRIGHT.textRanges[i].characterAttributes.fillColor = COLOR.BLACK;
+    TEXT_COPYRIGHT.textRanges[i].characterAttributes.size = TEXT.COPYRIGHT.SIZE;
+    TEXT_COPYRIGHT.textRanges[i].paragraphAttributes.justification = Justification.CENTER;
   }
 }
 
