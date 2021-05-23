@@ -1,7 +1,7 @@
 /**
  * Скрипт, который открывает все файлы *.ai в папке и находит все использующиеся там шрифты
  * @copyright Sergey Turulin <sergey@adobescript.ru>
- * @version 1.1
+ * @version 1.2
  * telegram: @turulin
  * twitter: @STurulin
  */
@@ -166,13 +166,12 @@ function runFont() {
 }
 
 function runShow() {
-    var file, message = ''
+    var file, message = 'Файлы в папке ' + decodeURI(sourceFolder.fullName)
     for (var i = 0; i < files.length; i++) {
         file = files[i]
-        message += diffFolderFile(file) + '\n'
+        message += '\n' + diffFolderFile(file)
     }
-
-    dialogEnd(message, '*.ai-файлы в папке')
+    alert(message)
 }
 
 function dialogStart() {
@@ -314,8 +313,7 @@ function dialogStart() {
 
     buttonShow.onClick = function() {
         $.setenv(SLC1, sourceFolder)
-        runShowScript = true
-        dialog.close()
+        runShow()
     }
 
     buttonCancel.onClick = function() {
@@ -329,7 +327,4 @@ function dialogStart() {
 dialogStart()
 if (true === runFontScript) {
     runFont()
-}
-if (true === runShowScript) {
-    runShow()
 }
