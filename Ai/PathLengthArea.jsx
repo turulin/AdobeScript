@@ -20,7 +20,7 @@ run = function() {
     alert(
         'Выделенная линия: \n' +
         'Длина: ' + Math.round(10 * app.activeDocument.selection[0].length) / 10 + ' пикс.\n' +
-        'Площадь: ' + Math.round(10 * app.activeDocument.selection[0].area) / 10 + ' кв. пикс.'
+        'Площадь: ' + Math.abs(Math.round(10 * app.activeDocument.selection[0].area) / 10) + ' кв. пикс.'
     )
 }
 
