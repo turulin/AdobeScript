@@ -35,6 +35,13 @@ var dialog = function() {
             name: 'мм',
             unit: RulerUnits.Millimeters,
         },
+        'cm': {
+            name: 'см',
+            unit: RulerUnits.Centimeters,
+        },'m': {
+            name: 'м',
+            unit: RulerUnits.Meters,
+        },
         'pt': {
             name: 'пункты',
             unit: RulerUnits.Points,
@@ -42,10 +49,6 @@ var dialog = function() {
         'px': {
             name: 'пикселы',
             unit: RulerUnits.Pixels,
-        },
-        'cm': {
-            name: 'см',
-            unit: RulerUnits.Centimeters,
         },
         'in': {
             name: 'дюймы',
@@ -296,6 +299,7 @@ var dialog = function() {
 
     // End of ScriptUI
 
+    alert(DOC.rulerUnits)
     for (var key in UNIT) {
         if (!UNIT.hasOwnProperty(key)) {
             continue
