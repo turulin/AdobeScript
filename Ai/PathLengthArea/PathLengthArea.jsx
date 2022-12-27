@@ -299,7 +299,6 @@ var dialog = function() {
 
     // End of ScriptUI
 
-    alert(DOC.rulerUnits)
     for (var key in UNIT) {
         if (!UNIT.hasOwnProperty(key)) {
             continue
