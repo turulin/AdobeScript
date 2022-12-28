@@ -21,13 +21,14 @@ var roundAbs = function(value, factor) {
 var dialog = function() {
     var
         needUndo = false,
-        finishDraw = false,
         isFirstCalculation = true,
-        areaColor = new CMYKColor()
+        areaColor = new CMYKColor(),
+        ignoreOnChange = false,
+        notNumberRe = new RegExp('[^0-9.\,]', 'mg')
 
-    areaColor.cyan = 0
-    areaColor.magenta = 100
-    areaColor.yellow = 0
+    areaColor.cyan = 9.08
+    areaColor.magenta = 92.63
+    areaColor.yellow = 21.26
     areaColor.black = 0
 
     const UNIT = {
@@ -38,7 +39,7 @@ var dialog = function() {
         'cm': {
             name: 'см',
             unit: RulerUnits.Centimeters,
-        },'m': {
+        }, 'm': {
             name: 'м',
             unit: RulerUnits.Meters,
         },
@@ -57,6 +58,9 @@ var dialog = function() {
     }
 
     function showValues() {
+        if (DEBUG) {
+            alert('fun: showValues()')
+        }
         const unit = 'pt'
 
         var sourceLine = LINE
@@ -79,7 +83,7 @@ var dialog = function() {
                 textLine.text = roundAbs(lineUnitValue.as(lineUnit)).toString()
             }
 
-            const lineScaleUnit = new UnitValue(parseFloat(textLine.text), lineUnit)
+            const lineScaleUnit = new UnitValue(parseFloat(textLine.text.replace(',', '.')), lineUnit)
             lineScale = lineScaleUnit.as('pt') / sourceLine.length
         }
 
@@ -91,7 +95,11 @@ var dialog = function() {
 
         // Length
         const length = new UnitValue(sourceArea.length, unit)
-        textLength.text = roundAbs(lineScale * scale * length.as(valueUnit))
+        var textLengthValue = roundAbs(lineScale * scale * length.as(valueUnit))
+        if (isNaN(textLengthValue)) {
+            textLengthValue = ''
+        }
+        textLength.text = textLengthValue
 
         // Area
         textArea.enabled = sourceArea.closed
@@ -100,7 +108,12 @@ var dialog = function() {
             textArea.text = ''
         }
         const areaK = new UnitValue(1, unit)
-        textArea.text = roundAbs(sourceArea.area * Math.pow(areaK.as(valueUnit), 2) * Math.pow(lineScale * scale, 2))
+        var textAreaValue = roundAbs(
+            sourceArea.area * Math.pow(areaK.as(valueUnit), 2) * Math.pow(lineScale * scale, 2))
+        if (isNaN(textAreaValue)) {
+            textAreaValue = ''
+        }
+        textArea.text = textAreaValue
 
         isFirstCalculation = false
     }
@@ -113,35 +126,37 @@ var dialog = function() {
         }
     }
 
-    function draw() {
-        showValues()
-    }
-
     function startAction() {
-        try {
-            draw()
-        } catch (e) {
-            alert(e.message)
+        if (DEBUG) {
+            alert('fun: startAction()')
         }
-        if (false === finishDraw) {
-            needUndo = true
-            redraw()
-        }
+        showValues()
+        needUndo = true
+        redraw()
     }
 
     function previewStart() {
+        if (DEBUG) {
+            alert('fun: previewStart(needUndo = ' + (needUndo ? 'true' : 'false') + ')')
+        }
         if (true === needUndo) {
             appUnDo()
             needUndo = false
-        } else {
-            needUndo = true
         }
 
         startAction()
     }
 
     function appUnDo() {
-        app.undo()
+        if (DEBUG) {
+            alert('fun: appUnDo()')
+        }
+        try {
+            app.undo()
+            redraw()
+        } catch (e) {
+            alert(e.message)
+        }
     }
 
     /*
@@ -318,10 +333,10 @@ var dialog = function() {
         dropdownUnit.selection = 0
     }
     dropdownLineUnit.onChange = function() {
-        showValues()
+        previewStart()
     }
     dropdownUnit.onChange = function() {
-        showValues()
+        previewStart()
     }
 
     if (2 === COUNT) {
@@ -338,14 +353,41 @@ var dialog = function() {
     }
 
     textLine.onChanging = function() {
-        showValues()
+        if (ignoreOnChange) {
+            return
+        }
+
+        if (null !== textLine.text.match(notNumberRe)) {
+            ignoreOnChange = true
+            textLine.text = textLine.text.replace(notNumberRe, '')
+            ignoreOnChange = false
+
+            return
+        }
+
+        previewStart()
     }
 
     textScale.onChanging = function() {
-        showValues()
+        if (ignoreOnChange) {
+            return
+        }
+
+        if (null !== textScale.text.match(notNumberRe)) {
+            ignoreOnChange = true
+            textScale.text = textScale.text.replace(notNumberRe, '')
+            ignoreOnChange = false
+
+            return
+        }
+
+        previewStart()
     }
 
     dialogPathLengthArea.onShow = function() {
+        if (DEBUG) {
+            alert('event: dialogPathLengthArea.onShow')
+        }
         previewStart()
     }
 
@@ -356,7 +398,6 @@ var dialog = function() {
     dialogPathLengthArea.onClose = function() {
         if (true === needUndo) {
             appUnDo()
-            redraw()
         }
 
         return true
@@ -404,5 +445,5 @@ var run = function() {
     dialog()
 }
 
-var DOC, COUNT, AREA, LINE
+var DOC, COUNT, AREA, LINE, DEBUG = false
 run()
