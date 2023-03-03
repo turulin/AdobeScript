@@ -2,6 +2,11 @@
 
 Скрипт для Иллюстратора, который рисует все возможные линии между выделенными объектами (по их центрам).
 
+Сам скрипт:
+<pre>LinesBetweenObjects.jsx</pre>
+
+Как запускать скрипты можно <a href="https://adobescript.ru/tech/script#run">прочитать тут</a>.
+
 Ко всем нарисованным линиям можно сразу применить графический стиль — GraphicStyle — из палитры Иллюстратора.
 
 ![Drawing lines between the centers of all selected objects!](./LinesBetweenObjects.png "Drawing lines between the centers of all selected objects")
