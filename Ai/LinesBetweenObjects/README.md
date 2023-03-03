@@ -4,7 +4,7 @@
 
 Ко всем нарисованным линиям можно сразу применить графический стиль — GraphicStyle — из палитры Иллюстратора.
 
-![Drawing lines between the centers of all selected objects!](./LinesBetweenObjects/LinesBetweenObjects.png "Drawing lines between the centers of all selected objects")
+![Drawing lines between the centers of all selected objects!](./LinesBetweenObjects.png "Drawing lines between the centers of all selected objects")
 
 ## Настройки
 
