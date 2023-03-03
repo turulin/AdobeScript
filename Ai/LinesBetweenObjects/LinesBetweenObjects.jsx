@@ -1,8 +1,12 @@
 /**
  * Рисование линий между центрами всех выделенных объектов
  * Drawing lines between the centers of all selected objects
- * ©Sergey Turulin
- * email: sergey@adobescript.ru
+ *
+ * @copyright Sergey Turulin
+ *
+ * https://adobescript.ru
+ * https://adobescript.com
+ * sergey@adobescript.ru
  * telegram: @adobescript
  * twitter: @adobescript
  */
@@ -60,11 +64,11 @@ function run() {
     } catch (e) {
     }
 
-    var count = 0, stop1, stop2, point1, point2, pathItem, length
-    for (var i = 0; i < DOCUMENT.selection.length; i++) {
+    var count = 0, i, j, stop1, stop2, point1, point2, pathItem, length
+    for (i = 0; i < DOCUMENT.selection.length; i++) {
         stop1 = DOCUMENT.selection[i]
         point1 = [stop1.left + (stop1.width / 2), stop1.top - (stop1.height / 2)]
-        for (var j = i + 1; j < DOCUMENT.selection.length; j++) {
+        for (j = i + 1; j < DOCUMENT.selection.length; j++) {
             stop2 = DOCUMENT.selection[j]
             point2 = [stop2.left + (stop2.width / 2), stop2.top - (stop2.height / 2)]
 
