@@ -11,6 +11,7 @@
  * twitter: https://twitter.com/adobescript Twitter
  *
  * @version 1.1
+ * @version 1.2: Added unit support check
  */
 
 var roundAbs = function(value, factor) {
@@ -31,30 +32,54 @@ var dialog = function() {
     areaColor.yellow = 21.26
     areaColor.black = 0
 
-    const UNIT = {
-        'mm': {
+    var UNIT = [], units
+    try {
+        units = RulerUnits.Millimeters
+        UNIT['mm'] = {
             name: 'мм',
-            unit: RulerUnits.Millimeters,
-        },
-        'cm': {
+            unit: units,
+        }
+    } catch (e) {
+    }
+    try {
+        units = RulerUnits.Centimeters
+        UNIT['cm'] = {
             name: 'см',
-            unit: RulerUnits.Centimeters,
-        }, 'm': {
+            unit: units,
+        }
+    } catch (e) {
+    }
+    try {
+        units = RulerUnits.Meters
+        UNIT['m'] = {
             name: 'м',
-            unit: RulerUnits.Meters,
-        },
-        'pt': {
+            unit: units,
+        }
+    } catch (e) {
+    }
+    try {
+        units = RulerUnits.Points
+        UNIT['pt'] = {
             name: 'пункты',
-            unit: RulerUnits.Points,
-        },
-        'px': {
+            unit: units,
+        }
+    } catch (e) {
+    }
+    try {
+        units = RulerUnits.Pixels
+        UNIT['px'] = {
             name: 'пикселы',
-            unit: RulerUnits.Pixels,
-        },
-        'in': {
+            unit: units,
+        }
+    } catch (e) {
+    }
+    try {
+        units = RulerUnits.Inches
+        UNIT['in'] = {
             name: 'дюймы',
-            unit: RulerUnits.Inches,
-        },
+            unit: units,
+        }
+    } catch (e) {
     }
 
     function showValues() {
